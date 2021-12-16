@@ -11,7 +11,7 @@ Get-ChildItem -Path $PSScriptRoot -Recurse -File -Filter '*.ps1' | ForEach-Objec
 
 
 [String] $Global:KeePassConfigurationFile = '{0}\KeePassConfiguration.xml' -f $PSScriptRoot
-[String] $Global:KeePassLibraryPath = '{0}\bin\KeePassLib_2.39.1.dll' -f $PSScriptRoot
+[String] $Global:KeePassLibraryPath = '{0}\bin\KeePassLib_2.49.dll' -f $PSScriptRoot
 
 ## Source KpLib
 Import-KPLibrary
