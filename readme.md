@@ -21,8 +21,9 @@ Please check out our [Getting Started](https://github.com/PSKeePass/PoShKeePass/
 ## Important Notes & Reminders
 
 1. Please always keep up to date **backups** of your KeePass database files .kdbx and .key files.
-2. The module uses the KeePassLib 2.39.1 which is included in the module.
-3. This module was built and tested in PowerShell 5.1 on Windows 10 but should work in PowerShell 4 and Windows 8.1 and Server 2012 R2 and up. It may work in some earlier versions but is currently untested and not supported. If you come across issues create an issue and I will look into fixing it or create a pull request.
+2. As of version 2.1.3.1 the module uses the KeePassLib 2.49 which is included in the module.
+3. Module is tested with KeePass version 2.49. Correct work with other versions (especially old ones) is NOT guaranteed
+4. This module was built and tested in PowerShell 5.1 on Windows 10 but should work in PowerShell 4 and Windows 8.1 and Server 2012 R2 and up. It may work in some earlier versions but is currently untested and not supported. If you come across issues create an issue and I will look into fixing it or create a pull request.
 
 ## Changelog
 
