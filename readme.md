@@ -2,9 +2,6 @@
 
 [PoShKeePass](https://www.powershellgallery.com/packages/PoShKeePass) is a PowerShell module that combines the ease of the PowerShell cli and the extensibility of the [KeePassLib API](http://keepass.info/help/v2/setup.html) to provide a powerful and easy to use management and automating platform for [KeePass](http://keepass.info/) databases.
 
-[![psgallery](https://img.shields.io/powershellgallery/v/poshkeepass.svg)](https://www.powershellgallery.com/packages/PoShKeePass/)
-[![psgallery](https://img.shields.io/powershellgallery/dt/poshkeepass.svg)](https://www.powershellgallery.com/packages/PoShKeePass/)
-
 ## Features
 
 1. **Database Configuration Profiles** - Supports mutliple databases and authentication options.
@@ -15,9 +12,7 @@
 
 ### Install
 
-```powershell
-Install-Module -Name PoShKeePass
-```
+Build from source (for now)
 
 ### Documentation
 
@@ -32,6 +27,14 @@ Please check out our [Getting Started](https://github.com/PSKeePass/PoShKeePass/
 ## Changelog
 
 Please review the [changelog document](https://github.com/PSKeePass/PoShKeePass/blob/master/changelog.md) for a full history.
+
+## v.2.1.3.1
+* Update KeePassLib to 2.49
+
+* Added new properties to KPPSObject:
+  * CustomIconUuid - returns UUID of selected custom icon of group/entry
+  * CustomStrings - returns hashtable of user added strings of current entry
+  * Attachments - returns hashtable of attachments of current entry
 
 ## v.2.1.3.0
 
