@@ -81,6 +81,9 @@ function ConvertTo-KPPSObject
                         'URL'                     = $_keepassItem.Strings.ReadSafe('URL');
                         'Notes'                   = $_keepassItem.Strings.ReadSafe('Notes');
                         'IconId'                  = $_keepassItem.IconId;
+                        'CustomIconUuid'          = $_keepassItem.CustomIconUuid;
+                        'CustomStrings'           = $_keepassItem.Strings.Where({$_.Key -notmatch 'Notes|Password|Title|URL|Username'});
+                        'Attachments'             = $_keepassItem.Binaries;
                         'Credential'              = $Credential;
                         'DatabaseProfileName'     = $DatabaseProfileName;
                         'KPEntry'                 = $_keepassItem;
@@ -98,11 +101,6 @@ function ConvertTo-KPPSObject
         {
             foreach ($_keepassItem in $KeePassGroup)
             {
-                if($_keepassItem.ParentGroup.Name)
-                { $FullPath = $_keepassItem.ParentGroup.GetFullPath('/', $true) }
-                else
-                { $FullPath = '' }
-
                 $KeePassPsObject = New-Object -TypeName PSObject -Property ([ordered]@{
                         'Uuid'                    = $_keepassItem.Uuid;
                         'Name'                    = $_keepassItem.Name;
@@ -120,6 +118,7 @@ function ConvertTo-KPPSObject
                         'Groups'                  = $_keepassItem.Groups;
                         'EntryCount'              = $_keepassItem.Entries.Count;
                         'IconId'                  = $_keepassItem.IconId;
+                        'CustomIconUuid'          = $_keepassItem.CustomIconUuid;
                         'DatabaseProfileName'     = $DatabaseProfileName;
                         'KPGroup'                 = $_keepassItem;
                     })

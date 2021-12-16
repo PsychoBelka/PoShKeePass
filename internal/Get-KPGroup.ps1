@@ -49,7 +49,6 @@ function Get-KPGroup
     {
         try
         {
-            [KeePassLib.PwGroup[]] $KeePassOutGroups = $null
             [KeePassLib.PwGroup[]] $KeePassGroups = $KeePassConnection.RootGroup
             $KeePassGroups += $KeePassConnection.RootGroup.GetFlatGroupList()
         }
