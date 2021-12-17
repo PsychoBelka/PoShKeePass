@@ -2,9 +2,9 @@ function ConvertTo-KPPSObject
 {
     <#
         .SYNOPSIS
-            This Function will accept KeePass Entry Objects and Convert them to a Powershell Object for Ease of Use.
+            This Function will accept KeePass Entry, Group or CustomIcon Objects and Convert them to a Powershell Object for Ease of Use.
         .DESCRIPTION
-            This Function will accept KeePass Entry Objects and Convert them to a Powershell Object for Ease of Use.
+            This Function will accept KeePass Entry, Group or CustomIcon Objects and Convert them to a Powershell Object for Ease of Use.
 
             It will get the Protected Strings from the database like, Title,UserName,Password,URL,Notes.
 
@@ -32,6 +32,10 @@ function ConvertTo-KPPSObject
         [Parameter(Position = 0, Mandatory, ValueFromPipeline, ValueFromPipelineByPropertyName, ParameterSetName = 'Group')]
         [ValidateNotNullOrEmpty()]
         [KeePassLib.PwGroup[]] $KeePassGroup,
+
+        [Parameter(Position = 0, Mandatory, ValueFromPipeline, ValueFromPipelineByPropertyName, ParameterSetName = 'CustomIcon')]
+        [ValidateNotNullOrEmpty()]
+        [KeePassLib.PwCustomIcon[]] $KeePassCustomIcon,
 
         [Parameter(Position = 1, ParameterSetName = 'Entry')]
         [switch] $WithCredential,
@@ -132,6 +136,20 @@ function ConvertTo-KPPSObject
                 $KeePassPsObject | Add-Member MemberSet PSStandardMembers $PSKeePassGroupStandardMembers
 
                 $KeePassPsObject
+            }
+        }
+        elseif ($PSCmdlet.ParameterSetName -eq 'CustomIcon'){
+            foreach ($_keepassItem in $KeePassCustomIcon){
+                $KeePassPsObject = New-Object -TypeName PSObject -Property ([ordered]@{
+                    'Uuid'                      = $_keepassItem.Uuid
+                    'Name'                      = $_keepassItem.Name
+                    'Image'                     = $_keepassItem.Image
+                    'ImageDataPng'              = $_keepassItem.ImageDataPng
+                    'LastModificationTimeUtc'   = $_keepassItem.LastModificationTime
+                })
+            $KeePassPsObject.PSObject.TypeNames.Insert(0, 'PSKeePass.CustomIcon')
+
+            $KeePassPsObject
             }
         }
     }
