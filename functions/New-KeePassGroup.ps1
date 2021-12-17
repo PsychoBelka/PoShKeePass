@@ -21,6 +21,9 @@ function New-KeePassGroup
             This parameter was created with scripting in mind.
         .PARAMETER IconName
             Specify the Name of the Icon for the Group to display in the KeePass UI.
+        .PARAMETER CustomIconUuid
+            Specify the Uuid ([KeePassLib.PwUuid]) of the Custom Icon stored in database for the Group to display in the KeePass UI.
+            Custom icon have priority when choosing what icon to display, meaning if CustomIconUuid is set, it will be displayed in KeePass UI regardless of IconName value
         .PARAMETER Notes
             Specify group notes
         .PARAMETER Expires
@@ -54,23 +57,27 @@ function New-KeePassGroup
 
         [Parameter(Position = 3)]
         [ValidateNotNullOrEmpty()]
-        [String] $Notes,
+        [KeePassLib.PwUuid] $CustomIconUuid = [KeePassLib.PwUuid]::Zero,
 
         [Parameter(Position = 4)]
-        [switch] $Expires,
+        [ValidateNotNullOrEmpty()]
+        [String] $Notes,
 
         [Parameter(Position = 5)]
+        [switch] $Expires,
+
+        [Parameter(Position = 6)]
         [DateTime] $ExpiryTime,
 
-        [Parameter(Position = 6, ValueFromPipelineByPropertyName)]
+        [Parameter(Position = 7, ValueFromPipelineByPropertyName)]
         [ValidateNotNullOrEmpty()]
         [string] $DatabaseProfileName,
 
-        [Parameter(Position = 7)]
+        [Parameter(Position = 8)]
         [ValidateNotNullOrEmpty()]
         [PSobject] $MasterKey,
 
-        [Parameter(Position = 8)]
+        [Parameter(Position = 9)]
         [Switch] $PassThru
     )
     begin
@@ -87,6 +94,7 @@ function New-KeePassGroup
             KeePassConnection  = $KeePassConnectionObject
             GroupName          = $KeePassGroupName
             IconName           = $IconName
+            CustomIconUuid     = $CustomIconUuid
             PassThru           = $PassThru
             KeePassParentGroup = $KeePassParentGroup
             Notes              = $Notes

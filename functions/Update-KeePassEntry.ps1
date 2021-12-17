@@ -36,7 +36,11 @@ function Update-KeePassEntry
             If not provided and the database requires one you will be prompted for it.
             This parameter was created with scripting in mind.
         .PARAMETER IconName
-            Specify the Name of the Icon for the Entry to display in the KeePass UI.
+            Specify the Name of the Icon for the Entry to display in the KeePass UI
+            Providing this parameter will clear CustomIconUuid property of selected Entry.
+        .PARAMETER CustomIconUuid
+            Specify the Uuid ([KeePassLib.PwUuid]) of the Custom Icon stored in database for the Entry to display in the KeePass UI.
+            Setting value to [KeePassLib.PwUuid]::Zero will make KeePass UI use Icon provided by IconName property
         .PARAMETER Expires
             Specify if you want the KeePass Object to Expire, default is to not expire.
         .PARAMETER ExpiryTime
@@ -97,32 +101,33 @@ function Update-KeePassEntry
         [string] $IconName,
 
         [Parameter(Position = 8)]
+        [ValidateNotNullOrEmpty()]
+        [KeePassLib.PwUuid] $CustomIconUuid,
+
+        [Parameter(Position = 9)]
         [switch] $Expires,
 
-        [Parameter(Position = 9)]
+        [Parameter(Position = 10)]
         [DateTime] $ExpiryTime,
 
-        [Parameter(Position = 9)]
+        [Parameter(Position = 11)]
         [ValidateNotNullOrEmpty()]
         [String[]] $Tags,
 
-        [Parameter(Position = 11, ValueFromPipelineByPropertyName)]
+        [Parameter(Position = 12, ValueFromPipelineByPropertyName)]
         [ValidateNotNullOrEmpty()]
         [string] $DatabaseProfileName,
 
-        [Parameter(Position = 12)]
+        [Parameter(Position = 13)]
         [ValidateNotNullOrEmpty()]
         [PSobject] $MasterKey,
 
-        [Parameter(Position = 13)]
+        [Parameter(Position = 14)]
         [Switch] $PassThru,
 
-        [Parameter(Position = 14)]
+        [Parameter(Position = 15)]
         [Switch] $Force
     )
-    begin
-    {
-    }
     process
     {
         $KeePassConnectionObject = New-KPConnection -DatabaseProfileName $DatabaseProfileName -MasterKey $MasterKey
@@ -153,7 +158,11 @@ function Update-KeePassEntry
                 KeePassConnection = $KeePassConnectionObject
             }
 
-            if($IconName){ $setKPEntrySplat.IconName = $IconName }
+            if($IconName){
+                $setKPGroupSplat.IconName = $IconName
+                $setKPEntrySplat.CustomIconUuid = [KeePassLib.PwUuid]::Zero
+            }
+            if($CustomIconUuid){$setKPEntrySplat.CustomIconUuid = $CustomIconUuid}
             if(Test-Bound -ParameterName 'Expires'){ $setKPEntrySplat.Expires = $Expires }
             if($ExpiryTime){ $setKPEntrySplat.ExpiryTime = $ExpiryTime}
 

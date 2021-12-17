@@ -29,6 +29,8 @@ function Add-KPEntry
             Returns the New KeePass Entry after creation.
         .PARAMETER IconName
             Specify the Name of the Icon for the Entry to display in the KeePass UI.
+        .PARAMETER CustomIconUuid
+            Specify the Uuid ([KeePassLib.PwUuid]) of the Custom Icon stored in database for the Entry to display in the KeePass UI.
         .PARAMETER Expires
             Specify if you want the KeePass Object to Expire, default is to not expire.
         .PARAMETER ExpiryTime
@@ -66,15 +68,18 @@ function Add-KPEntry
         [KeePassLib.PwIcon] $IconName,
 
         [Parameter(Position = 8)]
-        [bool] $Expires,
+        [KeePassLib.PwUuid] $CustomIconUuid,
 
         [Parameter(Position = 9)]
-        [DateTime] $ExpiryTime,
+        [bool] $Expires,
 
         [Parameter(Position = 10)]
-        [String[]] $Tags,
+        [DateTime] $ExpiryTime,
 
         [Parameter(Position = 11)]
+        [String[]] $Tags,
+
+        [Parameter(Position = 12)]
         [Switch] $PassThru
     )
     begin
@@ -142,6 +147,10 @@ function Add-KPEntry
                 $KeePassEntry.IconId = $IconName
             }
 
+            if($CustomIconUuid){
+                $KeePassEntry.CustomIconUuid = $CustomIconUuid
+            }
+
             if(Test-Bound -ParameterName 'Expires')
             {
                 $KeePassEntry.Expires = $Expires
@@ -154,7 +163,7 @@ function Add-KPEntry
 
             if($Tags)
             {
-                $Tags | % { $null = $KeePassEntry.AddTag($_) }
+                $Tags | ForEach-Object { $null = $KeePassEntry.AddTag($_) }
             }
 
             $KeePassGroup.AddEntry($KeePassEntry, $true)

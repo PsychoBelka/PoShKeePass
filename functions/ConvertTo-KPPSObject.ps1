@@ -125,7 +125,7 @@ function ConvertTo-KPPSObject
 
                 ## Custom Object Formatting and Type
                 $KeePassPsObject.PSObject.TypeNames.Insert(0, 'PSKeePass.Group')
-                $PSKeePassGroupDisplaySet = 'Name', 'EntryCount', 'FullPath', 'IconId'
+                $PSKeePassGroupDisplaySet = 'Name', 'EntryCount', 'FullPath', 'SelectedIcon'
                 $PSKeePassGroupDefaultPropertySet = New-Object -TypeName System.Management.Automation.PSPropertySet('DefaultDisplayPropertySet', [String[]] $PSKeePassGroupDisplaySet)
                 $PSKeePassGroupStandardMembers = [System.Management.Automation.PSMemberInfo[]] @($PSKeePassGroupDefaultPropertySet)
 

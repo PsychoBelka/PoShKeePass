@@ -32,7 +32,10 @@ function New-KeePassEntry
             If not provided and the database requires one you will be prompted for it.
             This parameter was created with scripting in mind.
         .PARAMETER IconName
-            Specify the Name of the Icon for the Entry to display in the KeePass UI.
+            Specify the Name of the Icon for the Entry to display in the KeePass UI
+        .PARAMETER CustomIconUuid
+            Specify the Uuid ([KeePassLib.PwUuid]) of the Custom Icon stored in database for the Entry to display in the KeePass UI.
+            Custom icon have priority when choosing what icon to display, meaning if CustomIconUuid is set, it will be displayed in KeePass UI regardless of IconName value
         .PARAMETER Expires
             Specify if you want the KeePass Object to Expire, default is to not expire.
         .PARAMETER ExpiryTime
@@ -89,24 +92,28 @@ function New-KeePassEntry
         [string] $IconName = 'Key',
 
         [Parameter(Position = 7)]
-        [switch] $Expires,
+        [ValidateNotNullOrEmpty()]
+        [KeePassLib.PwUuid] $CustomIconUuid = [KeePassLib.PwUuid]::Zero,
 
         [Parameter(Position = 8)]
-        [DateTime] $ExpiryTime,
+        [switch] $Expires,
 
         [Parameter(Position = 9)]
+        [DateTime] $ExpiryTime,
+
+        [Parameter(Position = 10)]
         [ValidateNotNullOrEmpty()]
         [String[]] $Tags,
 
-        [Parameter(Position = 10, ValueFromPipelineByPropertyName)]
+        [Parameter(Position = 11, ValueFromPipelineByPropertyName)]
         [ValidateNotNullOrEmpty()]
         [string] $DatabaseProfileName,
 
-        [Parameter(Position = 11)]
+        [Parameter(Position = 12)]
         [ValidateNotNullOrEmpty()]
         [PSobject] $MasterKey,
 
-        [Parameter(Position = 12)]
+        [Parameter(Position = 13)]
         [Switch] $PassThru
     )
     begin
@@ -125,6 +132,7 @@ function New-KeePassEntry
                 URL               = $URL
                 UserName          = $UserName
                 IconName          = $IconName
+                CustomIconUuid    = $CustomIconUuid
                 KeePassGroup      = $KeePassGroup
                 KeePassPassword   = $KeePassPassword
                 PassThru          = $PassThru

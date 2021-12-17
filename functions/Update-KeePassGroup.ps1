@@ -24,7 +24,11 @@ function Update-KeePassGroup
             If not provided and the database requires one you will be prompted for it.
             This parameter was created with scripting in mind.
         .PARAMETER IconName
-            Specify the Name of the Icon for the Group to display in the KeePass UI.
+            Specify the Name of the Icon for the Group to display in the KeePass UI
+            Providing this parameter will clear CustomIconUuid property of selected Group.
+        .PARAMETER CustomIconUuid
+            Specify the Uuid ([KeePassLib.PwUuid]) of the Custom Icon stored in database for the Group to display in the KeePass UI.
+            Setting value to [KeePassLib.PwUuid]::Zero will make KeePass UI use Icon provided by IconName property
         .PARAMETER Notes
             Specify group notes
         .PARAMETER Expires
@@ -69,28 +73,32 @@ function Update-KeePassGroup
         [ValidateNotNullOrEmpty()]
         [string] $IconName,
 
-        [Parameter(Position = 5)]
-        [ValidateNotNullOrEmpty()]
-        [String] $Notes,
-
         [Parameter(Position = 3)]
-        [switch] $Expires,
+        [ValidateNotNullOrEmpty()]
+        [KeePassLib.PwUuid] $CustomIconUuid,
 
         [Parameter(Position = 4)]
-        [DateTime] $ExpiryTime,
+        [switch] $Expires,
 
-        [Parameter(Position = 5, ValueFromPipelineByPropertyName)]
-        [ValidateNotNullOrEmpty()]
-        [string] $DatabaseProfileName,
+        [Parameter(Position = 5)]
+        [DateTime] $ExpiryTime,
 
         [Parameter(Position = 6)]
         [ValidateNotNullOrEmpty()]
-        [PSobject] $MasterKey,
+        [String] $Notes,
 
-        [Parameter(Position = 7)]
-        [Switch] $PassThru,
+        [Parameter(Position = 7, ValueFromPipelineByPropertyName)]
+        [ValidateNotNullOrEmpty()]
+        [string] $DatabaseProfileName,
 
         [Parameter(Position = 8)]
+        [ValidateNotNullOrEmpty()]
+        [PSobject] $MasterKey,
+
+        [Parameter(Position = 9)]
+        [Switch] $PassThru,
+
+        [Parameter(Position = 10)]
         [Switch] $Force
     )
     begin
@@ -127,7 +135,11 @@ function Update-KeePassGroup
                 Notes             = $Notes
             }
 
-            if($IconName){ $setKPGroupSplat.IconName = $IconName }
+            if($IconName){
+                $setKPGroupSplat.IconName = $IconName
+                $setKPEntrySplat.CustomIconUuid = [KeePassLib.PwUuid]::Zero
+            }
+            if($CustomIconUuid){$setKPEntrySplat.CustomIconUuid = $CustomIconUuid}
             if($KeePassParentGroup){ $setKPGroupSplat.KeePassParentGroup = $KeePassParentGroup }
             if(Test-Bound -ParameterName 'Expires'){ $setKPGroupSplat.Expires = $Expires }
             if($ExpiryTime){ $setKPGroupSplat.ExpiryTime = $ExpiryTime }
