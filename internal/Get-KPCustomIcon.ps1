@@ -27,9 +27,9 @@ function Get-KPCustomIcon
         [ValidateNotNullOrEmpty()]
         [KeePassLib.PwDatabase]$KeePassConnection,
 
-        [Parameter(Position = 1, Mandatory, ParameterSetName = 'Index')]
+        [Parameter(Position = 1, ParameterSetName = 'Index')]
         [ValidateNotNullOrEmpty()]
-        [Int]$Index,
+        [Int]$Index = -1,
 
         [Parameter(Position = 1, Mandatory, ParameterSetName = 'Uuid', ValueFromPipeline, ValueFromPipelineByPropertyName)]
         [ValidateNotNullOrEmpty()]
