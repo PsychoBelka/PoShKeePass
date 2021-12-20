@@ -10,6 +10,7 @@
 1. **Database Configuration Profiles** - Supports mutliple databases and authentication options.
 2. **Getting, Creating, Updating, and Removing KeePass Entries and Groups** - All of these perform as much automatic database authentication as possible using the database configuration profile. For databases that use a masterkey (password) it will prompt for it.
 3. **Generating KeePass Passwords** - Supports most character sets and advanced keepass options. Also supports creating password profiles that can be specified to create a new password with the same rule set.
+4. **Custom icon management**
 
 ## Getting Started
 
@@ -31,6 +32,29 @@ Please check out our [Getting Started](https://github.com/PSKeePass/PoShKeePass/
 ## Changelog
 
 Please review the [changelog document](https://github.com/PSKeePass/PoShKeePass/blob/master/changelog.md) for a full history.
+
+## v.2.1.4.1
+* Added function:
+```powershell
+Rename-KeePassCustomIcon
+```
+* Code refactoring of other 'Custom icon' related functions
+
+## v.2.1.4.0
+* Added function:
+```powershell
+Get-KeePassCustomIcon
+```
+* Added internal function:
+```powershell
+Get-KPCustomIcon
+```
+* Updated funtions:
+```powershell
+Update-KeePassEntry
+Update-KeePassGroup
+```
+* You can now provide '-CustomIconUuid' parameter to updated functions to set custom icon for selected Entry/Group
 
 ## v.2.1.3.1
 * Update KeePassLib to 2.49
