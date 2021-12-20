@@ -27,9 +27,9 @@ function Get-KPCustomIcon
         [ValidateNotNullOrEmpty()]
         [KeePassLib.PwDatabase]$KeePassConnection,
 
-        [Parameter(Position = 1, ParameterSetName = 'Index')]
+        [Parameter(Position = 1, Mandatory, ParameterSetName = 'Index')]
         [ValidateNotNullOrEmpty()]
-        [Int]$Index = -1,
+        [Nullable[Int]]$Index,
 
         [Parameter(Position = 1, Mandatory, ParameterSetName = 'Uuid', ValueFromPipeline, ValueFromPipelineByPropertyName)]
         [ValidateNotNullOrEmpty()]
@@ -42,39 +42,30 @@ function Get-KPCustomIcon
     )
     process
     {
-        if(Test-KPConnection $KeePassConnection)
-        {
+        if(Test-KPConnection $KeePassConnection){
             $KeePassItems = $KeePassConnection.CustomIcons
 
-            if($PSCmdlet.ParameterSetName -eq 'UUID')
-            {
-                $KeePassItems | Where-Object { $KeePassUuid.CompareTo($_.Uuid) -eq 0 }
-            }
-            else
-            {
-                if($Index -ge 0)
-                {
-                    $KeePassItems = foreach($_keepassItem in $KeePassItems)
-                    {
-                        if($KeePassItems.IndexOf($_keepassItem) -eq $Index)
-                        {
+            Switch($PSCmdlet.ParameterSetName){
+                #Returns all icons
+                'None' {Return $KeePassItems}
+                #Returns icon by Index
+                'Index' {
+                    Return $KeePassItems = foreach($_keepassItem in $KeePassItems){
+                        if($KeePassItems.IndexOf($_keepassItem) -eq $Index){
                             $_keepassItem
                         }
                     }
                 }
-
-                if($Name)
-                {
-                    $KeePassItems = foreach($_keepassItem in $KeePassItems)
-                    {
-                        if($_keepassItem.Name.ToLower().Equals($Name.ToLower()))
-                        {
+                #Returns icon by Uuid
+                'Uuid' {Return $KeePassItems | Where-Object { $KeePassUuid.CompareTo($_.Uuid) -eq 0 }}
+                #Returns icon by Name
+                'Name' {
+                    Return $KeePassItems = foreach($_keepassItem in $KeePassItems){
+                        if($_keepassItem.Name.ToLower().Equals($Name.ToLower())){
                             $_keepassItem
                         }
                     }
                 }
-
-                $KeePassItems
             }
         }
     }

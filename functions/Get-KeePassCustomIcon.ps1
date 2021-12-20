@@ -34,7 +34,7 @@ function Get-KeePassCustomIcon{
     (
         [Parameter(Position = 0, ValueFromPipelineByPropertyName, ParameterSetName = 'Index')]
         [ValidateNotNullOrEmpty()]
-        [Int]$Index = -1,
+        [Nullable[Int]]$Index,
 
         [Parameter(Position = 0, ValueFromPipelineByPropertyName, ParameterSetName = 'Uuid')]
         [ValidateNotNullOrEmpty()]
@@ -59,12 +59,11 @@ function Get-KeePassCustomIcon{
         [hashtable] $getKpCustomIconSplat = @{
             'KeePassConnection' = $KeePassConnectionObject;
         }
-
-        If($Index -ge 0){$getKpCustomIconSplat.Index = $Index}
-
-        If($Name){$getKpCustomIconSplat.Name = $Name}
-        
-        If($Uuid){$getKpCustomIconSplat.Uuid = $Uuid}
+        Switch($PSCmdlet.ParameterSetName){
+            'Index' {$getKpCustomIconSplat.Index = $Index}
+            'Uuid' {$getKpCustomIconSplat.Uuid = $Uuid}
+            'Name' {$getKpCustomIconSplat.Name = $Name}
+        }
 
         Get-KPCustomIcon @getKpCustomIconSplat | ConvertTo-KPPSObject -DatabaseProfileName $DatabaseProfileName
     }
